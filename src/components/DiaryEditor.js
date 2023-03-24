@@ -46,20 +46,24 @@ const DiaryEditor = () => {
     const [emotion, setEmotion] = useState(3);
     const [date, setDate] = useState(getStringDate(new Date()));
 
-    const {} = useContext(DiaryDispatchContext);
+    const {onCreate} = useContext(DiaryDispatchContext);
     const handleClickEmote = (emotion) => {
         setEmotion(emotion);
     };
 
+    const navigate = useNavigate();
 
     const handleSubmit = () => {
         if(content.length < 1){
             contentRef.current.focus();
             return;
         }
+
+        onCreate(date, content, emotion);
+        navigate('/',{ replace: true })
     }
 
-    const navigate = useNavigate();
+    
     return (
         <div className='DiaryEditor'>
         <MyHeader 
@@ -73,7 +77,7 @@ const DiaryEditor = () => {
                     <input 
                     className='input_date'
                     value={date}
-                    onChange={(e) => setImmediate(e.target.value)}
+                    onChange={(e) => setDate(e.target.value)}
                     type="date" />
                 </div>
             </section>
@@ -103,7 +107,10 @@ const DiaryEditor = () => {
             <section>
                 <div className='control_box'>
                     <MyButton text={"취소하기"} onClick={() => navigate(-1)} />
-                    <MyButton text={"작성완료"} type={"positive"} onClick={() => {}}/>
+                    <MyButton 
+                        text={"작성완료"} 
+                        type={"positive"} 
+                        onClick={handleSubmit}/>
                 </div>
             </section>
         </div>
